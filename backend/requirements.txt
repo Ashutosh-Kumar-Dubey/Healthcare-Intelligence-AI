@@ -1,9 +1,9 @@
 fastapi==0.104.1
 uvicorn==0.24.0
+gunicorn==21.2.0
 sqlalchemy==2.0.23
-# psycopg2-binary==2.9.9
-pandas==3.0.2
-numpy==2.4.4
+pandas==2.2.2
+numpy==1.26.4
 chromadb==0.4.22
 langchain==0.1.0
 langchain-openai==0.0.2
