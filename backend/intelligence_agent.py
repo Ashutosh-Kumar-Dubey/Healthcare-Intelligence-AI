@@ -38,6 +38,7 @@ def _as_list(value: Any) -> List[Any]:
 def _clean_terms(text: str) -> List[str]:
     stopwords = {
         "show", "find", "which", "what", "where", "with", "have", "has", "near",
+        "how", "many", "count", "number", "total", "there",
         "facilities", "facility", "hospitals", "hospital", "clinics", "clinic",
         "regions", "region", "medical", "healthcare", "care", "the", "and", "for",
         "that", "are", "is", "in", "of", "to", "me", "all", "available",
@@ -351,7 +352,7 @@ class HealthcareIntelligenceAgent:
             for service, keywords in CRITICAL_SERVICE_KEYWORDS.items():
                 if service in query_lower and any(keyword in haystack for keyword in keywords):
                     score += 4
-            if not terms and (city or facility_type):
+            if (city or facility_type) and (not terms or score==0):
                 score = 1
             if score > 0:
                 matches.append((score, facility))
@@ -363,7 +364,7 @@ class HealthcareIntelligenceAgent:
         query_lower = query.lower()
         cities = sorted({f.address_city for f in facilities if f.address_city}, key=len, reverse=True)
         for city in cities:
-            if city.lower() in query_lower:
+            if re.search(rf"\b{re.escape(city.lower())}\b", query_lower):
                 return city
         return None
 
